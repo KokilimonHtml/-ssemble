@@ -1,0 +1,934 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browser & Search Engine Recommender</title>
+
+<style>
+:root {
+    --bg: #f5f5f5;
+    --text: #222;
+    --card: #ffffff;
+    --accent: #7b3fe4;
+    --accent-dark: #5727a8;
+}
+
+body.dark {
+    --bg: #0e0e12;
+    --text: #e5e5e5;
+    --card: #1a1a1f;
+    --accent: #a676ff;
+    --accent-dark: #7f44db;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+header {
+    background: var(--accent);
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* Описание под хедъра */
+.description {
+    text-align: center;
+    padding: 15px;
+    background: var(--bg);
+    border-bottom: 1px solid rgba(120,120,120,0.2);
+}
+
+.description p {
+    margin: 0;
+    font-size: 16px;
+    color: var(--text);
+}
+
+/* Fade анимации */
+.fade {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fade.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Модерни карти */
+.card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    transition: background 0.3s, transform 0.2s;
+}
+
+/* Картите с bounce + ease-out анимация */
+.item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid rgba(120,120,120,0.2);
+    padding: 15px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: bounceFade 0.6s forwards cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes bounceFade {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.item img {
+    width: 60px;
+    height: 60px;
+}
+
+/* Бутоните */
+button {
+    padding: 12px 25px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+    background: var(--accent-dark);
+}
+button:active {
+    transform: scale(0.95);
+}
+
+/* Контейнери */
+#content {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+#filters, #searchFilters {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#results, #searchResults {
+    display: none;
+    margin-bottom: 20px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    background: var(--card);
+    padding: 20px;
+    border-top: 2px solid var(--accent);
+}
+
+/* Бутон за тъмен/светъл режим – долен десен ъгъл */
+#themeToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: var(--card);
+    border: 2px solid var(--accent);
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s, border-color 0.3s;
+}
+
+#themeToggle:hover {
+    transform: scale(1.1);
+}
+
+#themeToggle img {
+    width: 60%;
+    height: 60%;
+    filter: none;
+}
+
+/* Назад бутон – долен ред, italic + bold, повече разстояние */
+.backBtn {
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 30px;
+}
+
+/* Бутони за избор между браузъри и търсачки */
+.choice-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<header>Избор на браузър и търсачка</header>
+
+<!-- Описание под хедъра -->
+<div class="description">
+    <p>Този сайт Ви помага да изберете най-подходящия браузър или търсачка според Вашите нужди.</p>
+</div>
+
+<!-- Бутон за тъмен/светъл режим -->
+<button id="themeToggle" onclick="toggleTheme()">
+    <img id="themeIcon" src="icon.png" alt="Dark/Light mode">
+</button>
+
+<div id="content">
+
+    <!-- Начална страница -->
+    <div id="intro" class="card fade show">
+        <h2>Как работи?</h2>
+        <p>
+            Изберете какво искате да изберете и ние ще ви препоръчаме най-подходящия вариант за Вас.
+        </p>
+        <div class="choice-buttons">
+            <button onclick="startBrowsers()">Избор на браузър</button>
+            <button onclick="startSearchEngines()">Избор на търсачка</button>
+        </div>
+    </div>
+
+    <!-- Филтри за браузъри -->
+    <div id="filters" class="fade">
+        <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
+            <button onclick="filterResults('security')">Сигурност</button>
+            <button onclick="filterResults('speed')">Бързина</button>
+            <button onclick="filterResults('privacy')">Поверителност</button>
+            <button onclick="filterResults('all')">Всички</button>
+            <button onclick="showBestBrowser()">Най-добър браузър</button>
+        </div>
+        <button class="backBtn" onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Резултати за браузъри -->
+    <div id="results" class="card fade"></div>
+
+    <!-- Филтри за търсачки -->
+    <div id="searchFilters" class="fade">
+        <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
+            <button onclick="filterSearchResults('privacy')">Поверителност</button>
+            <button onclick="filterSearchResults('accuracy')">Точност</button>
+            <button onclick="filterSearchResults('features')">Функции</button>
+            <button onclick="filterSearchResults('all')">Всички</button>
+            <button onclick="showBestSearchEngine()">Най-добра търсачка</button>
+        </div>
+        <button class="backBtn" onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Резултати за търсачки -->
+    <div id="searchResults" class="card fade"></div>
+
+</div>
+
+<footer>
+    <p>Контакти при проблем с уебсайта:</p>
+    
+    <p>Име: Калоян Кирилов</p>
+    <p>Телефон: 0898479345</p>
+    <p>Email: kirilov.kaloyan.oupe@gmail.com</p>
+</footer>
+
+<script>
+function fadeIn(id) {
+    const el = document.getElementById(id);
+    setTimeout(() => el.classList.add("show"), 20);
+}
+function fadeOut(id) {
+    document.getElementById(id).classList.remove("show");
+}
+
+function startBrowsers() {
+    fadeOut("intro");
+    setTimeout(() => {
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("filters").style.display = "flex";
+        document.getElementById("results").style.display = "block";
+        fadeIn("filters");
+        fadeIn("results");
+        renderBrowsers(browsers);
+    }, 300);
+}
+
+function startSearchEngines() {
+    fadeOut("intro");
+    setTimeout(() => {
+        document.getElementById("intro").style.display = "none";
+        document.getElementById("searchFilters").style.display = "flex";
+        document.getElementById("searchResults").style.display = "block";
+        fadeIn("searchFilters");
+        fadeIn("searchResults");
+        renderSearchEngines(searchEngines);
+    }, 300);
+}
+
+function goBack() {
+    fadeOut("filters");
+    fadeOut("results");
+    fadeOut("searchFilters");
+    fadeOut("searchResults");
+    setTimeout(() => {
+        document.getElementById("filters").style.display = "none";
+        document.getElementById("results").style.display = "none";
+        document.getElementById("searchFilters").style.display = "none";
+        document.getElementById("searchResults").style.display = "none";
+        document.getElementById("intro").style.display = "block";
+        fadeIn("intro");
+    }, 300);
+}
+
+const browsers = [
+    { name: "Brave", image: "brave.png", security: 8, speed: 7, privacy: 10,
+      description: "Силен фокус върху поверителност и блокиране на реклами." },
+    { name: "Firefox", image: "firefox.png", security: 8, speed: 7, privacy: 9,
+      description: "Силен баланс между сигурност и поверителност." },
+    { name: "Chrome", image: "chrome.png", security: 7, speed: 10, privacy: 4,
+      description: "Най-бързият браузър, но по-слаб в поверителността." },
+    { name: "Safari", image: "safari.png", security: 8, speed: 8, privacy: 7,
+      description: "Оптимизиран за Apple устройства и стабилен." },
+    { name: "Edge", image: "edge.png", security: 8, speed: 9, privacy: 6,
+      description: "Бърз, удобен и базиран на Chromium." }
+];
+
+const searchEngines = [
+    { name: "Google", image: "google.png", privacy: 4, accuracy: 10, features: 10,
+      description: "Най-популярната търсачка с най-добри резултати, но събира много данни." },
+    { name: "DuckDuckGo", image: "duckduckgo.png", privacy: 10, accuracy: 8, features: 7,
+      description: "Фокусирана върху поверителността, не проследява потребителите." },
+    { name: "Bing", image: "bing.png", privacy: 5, accuracy: 9, features: 8,
+      description: "Търсачката на Microsoft с добри резултати и интеграция." },
+    { name: "Startpage", image: "startpage.png", privacy: 9, accuracy: 9, features: 6,
+      description: "Предоставя резултати от Google, но с поверителност." },
+    { name: "Ecosia", image: "ecosia.png", privacy: 7, accuracy: 8, features: 6,
+      description: "Екологична търсачка, която използва приходите за засаждане на дървета." }
+];
+
+function renderBrowsers(list) {
+    const container = document.getElementById('results');
+    Array.from(container.children).forEach(child => child.style.opacity = 0);
+
+    setTimeout(() => {
+        container.innerHTML = "";
+        list.forEach((b, index) => {
+            const item = document.createElement("div");
+            item.className = "item fade show";
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.innerHTML = `
+                <img src="${b.image}" alt="${b.name}">
+                <div>
+                    <h3>${b.name}</h3>
+                    <p>${b.description}</p>
+                    <p><strong>Сигурност:</strong> ${b.security}/10</p>
+                    <p><strong>Бързина:</strong> ${b.speed}/10</p>
+                    <p><strong>Поверителност:</strong> ${b.privacy}/10</p>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }, 250);
+}
+
+function renderSearchEngines(list) {
+    const container = document.getElementById('searchResults');
+    Array.from(container.children).forEach(child => child.style.opacity = 0);
+
+    setTimeout(() => {
+        container.innerHTML = "";
+        list.forEach((s, index) => {
+            const item = document.createElement("div");
+            item.className = "item fade show";
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.innerHTML = `
+                <img src="${s.image}" alt="${s.name}">
+                <div>
+                    <h3>${s.name}</h3>
+                    <p>${s.description}</p>
+                    <p><strong>Поверителност:</strong> ${s.privacy}/10</p>
+                    <p><strong>Точност:</strong> ${s.accuracy}/10</p>
+                    <p><strong>Функции:</strong> ${s.features}/10</p>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }, 250);
+}
+
+function filterResults(type) {
+    if(type === "all") {
+        renderBrowsers(browsers);
+        return;
+    }
+    const sorted = [...browsers].sort((a,b)=>b[type]-a[type]);
+    renderBrowsers(sorted);
+}
+
+function filterSearchResults(type) {
+    if(type === "all") {
+        renderSearchEngines(searchEngines);
+        return;
+    }
+    const sorted = [...searchEngines].sort((a,b)=>b[type]-a[type]);
+    renderSearchEngines(sorted);
+}
+
+function showBestBrowser() {
+    const bestBrowser = browsers.reduce((best, current) => {
+        const bestScore = best.security + best.speed + best.privacy;
+        const currentScore = current.security + current.speed + current.privacy;
+        return currentScore > bestScore ? current : best;
+    });
+    renderBrowsers([bestBrowser]);
+}
+
+function showBestSearchEngine() {
+    const bestSearchEngine = searchEngines.reduce((best, current) => {
+        const bestScore = best.privacy + best.accuracy + best.features;
+        const currentScore = current.privacy + current.accuracy + current.features;
+        return currentScore > bestScore ? current : best;
+    });
+    renderSearchEngines([bestSearchEngine]);
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+    const icon = document.getElementById("themeIcon");
+    // Черна икона за светъл режим, бяла икона за тъмен режим
+    icon.src = document.body.classList.contains("dark") ? "icon1.png" : "icon.png";
+}
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Browser & Search Engine Recommender</title>
+
+<style>
+:root {
+    --bg: #f5f5f5;
+    --text: #222;
+    --card: #ffffff;
+    --accent: #7b3fe4;
+    --accent-dark: #5727a8;
+}
+
+body.dark {
+    --bg: #0e0e12;
+    --text: #e5e5e5;
+    --card: #1a1a1f;
+    --accent: #a676ff;
+    --accent-dark: #7f44db;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background 0.3s, color 0.3s;
+}
+
+header {
+    background: var(--accent);
+    color: white;
+    padding: 18px;
+    text-align: center;
+    font-size: 22px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+}
+
+/* Информация за сайта и изборни карти */
+.info-card, .choice-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    text-align: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+.info-card {
+    font-family: 'Times New Roman', Times, serif;
+    padding: 45px;
+}
+
+.info-card h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.info-card p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.choice-card h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.choice-card p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 25px;
+}
+
+/* Fade анимации */
+.fade {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease, transform 0.4s ease;
+}
+.fade.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Модерни карти */
+.card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 25px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
+    transition: background 0.3s, transform 0.2s;
+}
+
+/* Картите с bounce + ease-out анимация */
+.item {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border-bottom: 1px solid rgba(120,120,120,0.2);
+    padding: 15px 0;
+    opacity: 0;
+    transform: translateY(20px);
+    animation: bounceFade 0.6s forwards cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes bounceFade {
+    0% {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    50% {
+        opacity: 1;
+        transform: translateY(-5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.item img {
+    width: 60px;
+    height: 60px;
+}
+
+/* Бутоните */
+button {
+    padding: 12px 25px;
+    background: var(--accent);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.3s, transform 0.2s;
+}
+button:hover {
+    background: var(--accent-dark);
+}
+button:active {
+    transform: scale(0.95);
+}
+
+/* Контейнери */
+#content {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 15px;
+}
+
+#filters, #searchFilters {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+#results, #searchResults {
+    display: none;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 50px;
+    background: var(--card);
+    padding: 20px;
+    border-top: 2px solid var(--accent);
+}
+
+/* Бутон за тъмен/светъл режим – долен десен ъгъл */
+#themeToggle {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 9999;
+    background: #000000; /* Черен цвят */
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    transition: background 0.3s;
+    padding: 0;
+}
+
+#themeToggle:hover {
+    transform: scale(1.1);
+    background: #333333; /* По-светло черно при hover */
+}
+
+#themeToggle img {
+    width: 60%;
+    height: 60%;
+    filter: invert(1); /* Прави иконата бяла за контраст */
+}
+
+/* Назад бутон – долен ред, italic + bold, еднакво разстояние */
+.backBtn {
+    font-style: italic;
+    font-weight: bold;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+/* Бутони за избор между браузъри и търсачки */
+.choice-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+</style>
+</head>
+<body>
+
+<header>Избор на браузър и търсачка</header>
+
+<!-- Бутон за тъмен/светъл режим -->
+<button id="themeToggle" onclick="toggleTheme()">
+    <img id="themeIcon" src="icon.png" alt="Dark/Light mode">
+</button>
+
+<div id="content">
+
+    <!-- Информация за сайта -->
+    <div class="info-card fade show">
+        <h2>Добре дошли в нашия съветник</h2>
+        <p>Интелигентна система за препоръки на браузъри и търсачки, която Ви помага да направите информиран избор въз основа на бързина, сигурност и поверителност.</p>
+    </div>
+
+    <!-- Избор на браузър -->
+    <div class="choice-card fade show">
+        <h2>Избор на браузър</h2>
+        <p>Намерете перфектния браузър за Вашите нужди с нашите интелигентни препоръки.</p>
+        <button onclick="startBrowsers()">Избор на браузър</button>
+    </div>
+
+    <!-- Избор на търсачка -->
+    <div class="choice-card fade show">
+        <h2>Избор на търсачка</h2>
+        <p>Открийте идеалната търсачка според Вашите предпочитания за поверителност и функционалност.</p>
+        <button onclick="startSearchEngines()">Избор на търсачка</button>
+    </div>
+
+    <!-- Филтри за браузъри -->
+    <div id="filters" class="fade">
+        <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
+            <button onclick="filterResults('security')">Сигурност</button>
+            <button onclick="filterResults('speed')">Бързина</button>
+            <button onclick="filterResults('privacy')">Поверителност</button>
+            <button onclick="filterResults('all')">Всички</button>
+            <button onclick="showBestBrowser()">Най-добър браузър</button>
+        </div>
+        <button class="backBtn" onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Резултати за браузъри -->
+    <div id="results" class="card fade"></div>
+
+    <!-- Филтри за търсачки -->
+    <div id="searchFilters" class="fade">
+        <div style="display:flex; gap:15px; flex-wrap:wrap; justify-content:center;">
+            <button onclick="filterSearchResults('privacy')">Поверителност</button>
+            <button onclick="filterSearchResults('accuracy')">Точност</button>
+            <button onclick="filterSearchResults('features')">Функции</button>
+            <button onclick="filterSearchResults('all')">Всички</button>
+            <button onclick="showBestSearchEngine()">Най-добра търсачка</button>
+        </div>
+        <button class="backBtn" onclick="goBack()">Назад</button>
+    </div>
+
+    <!-- Резултати за търсачки -->
+    <div id="searchResults" class="card fade"></div>
+
+</div>
+
+<footer>
+    <p>Име: Твоето име</p>
+    <p>Телефон: 0000 000 000</p>
+    <p>Email: example@mail.com</p>
+</footer>
+
+<script>
+function fadeIn(id) {
+    const el = document.getElementById(id);
+    setTimeout(() => el.classList.add("show"), 20);
+}
+function fadeOut(id) {
+    document.getElementById(id).classList.remove("show");
+}
+
+function startBrowsers() {
+    document.querySelector('.info-card').style.display = 'none';
+    document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'none');
+    
+    setTimeout(() => {
+        document.getElementById("filters").style.display = "flex";
+        document.getElementById("results").style.display = "block";
+        fadeIn("filters");
+        fadeIn("results");
+        renderBrowsers(browsers);
+    }, 300);
+}
+
+function startSearchEngines() {
+    document.querySelector('.info-card').style.display = 'none';
+    document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'none');
+    
+    setTimeout(() => {
+        document.getElementById("searchFilters").style.display = "flex";
+        document.getElementById("searchResults").style.display = "block";
+        fadeIn("searchFilters");
+        fadeIn("searchResults");
+        renderSearchEngines(searchEngines);
+    }, 300);
+}
+
+function goBack() {
+    fadeOut("filters");
+    fadeOut("results");
+    fadeOut("searchFilters");
+    fadeOut("searchResults");
+    setTimeout(() => {
+        document.getElementById("filters").style.display = "none";
+        document.getElementById("results").style.display = "none";
+        document.getElementById("searchFilters").style.display = "none";
+        document.getElementById("searchResults").style.display = "none";
+        
+        document.querySelector('.info-card').style.display = 'block';
+        document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'block');
+        fadeIn("info-card");
+        document.querySelectorAll('.choice-card').forEach(card => fadeIn(card));
+    }, 300);
+}
+
+const browsers = [
+    { name: "Brave", image: "brave.png", security: 8, speed: 7, privacy: 10,
+      description: "Силен фокус върху поверителност и блокиране на реклами." },
+    { name: "Firefox", image: "firefox.png", security: 8, speed: 7, privacy: 9,
+      description: "Силен баланс между сигурност и поверителност." },
+    { name: "Chrome", image: "chrome.png", security: 7, speed: 10, privacy: 4,
+      description: "Най-бързият браузър, но по-слаб в поверителността." },
+    { name: "Safari", image: "safari.png", security: 8, speed: 8, privacy: 7,
+      description: "Оптимизиран за Apple устройства и стабилен." },
+    { name: "Edge", image: "edge.png", security: 8, speed: 9, privacy: 6,
+      description: "Бърз, удобен и базиран на Chromium." }
+];
+
+const searchEngines = [
+    { name: "Google", image: "google.png", privacy: 4, accuracy: 10, features: 10,
+      description: "Най-популярната търсачка с най-добри резултати, но събира много данни." },
+    { name: "DuckDuckGo", image: "duckduckgo.png", privacy: 10, accuracy: 8, features: 7,
+      description: "Фокусирана върху поверителността, не проследява потребителите." },
+    { name: "Bing", image: "bing.png", privacy: 5, accuracy: 9, features: 8,
+      description: "Търсачката на Microsoft с добри резултати и интеграция." },
+    { name: "Startpage", image: "startpage.png", privacy: 9, accuracy: 9, features: 6,
+      description: "Предоставя резултати от Google, но с поверителност." },
+    { name: "Ecosia", image: "ecosia.png", privacy: 7, accuracy: 8, features: 6,
+      description: "Екологична търсачка, която използва приходите за засаждане на дървета." }
+];
+
+function renderBrowsers(list) {
+    const container = document.getElementById('results');
+    Array.from(container.children).forEach(child => child.style.opacity = 0);
+
+    setTimeout(() => {
+        container.innerHTML = "";
+        list.forEach((b, index) => {
+            const item = document.createElement("div");
+            item.className = "item fade show";
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.innerHTML = `
+                <img src="${b.image}" alt="${b.name}">
+                <div>
+                    <h3>${b.name}</h3>
+                    <p>${b.description}</p>
+                    <p><strong>Сигурност:</strong> ${b.security}/10</p>
+                    <p><strong>Бързина:</strong> ${b.speed}/10</p>
+                    <p><strong>Поверителност:</strong> ${b.privacy}/10</p>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }, 250);
+}
+
+function renderSearchEngines(list) {
+    const container = document.getElementById('searchResults');
+    Array.from(container.children).forEach(child => child.style.opacity = 0);
+
+    setTimeout(() => {
+        container.innerHTML = "";
+        list.forEach((s, index) => {
+            const item = document.createElement("div");
+            item.className = "item fade show";
+            item.style.animationDelay = `${index * 0.1}s`;
+            item.innerHTML = `
+                <img src="${s.image}" alt="${s.name}">
+                <div>
+                    <h3>${s.name}</h3>
+                    <p>${s.description}</p>
+                    <p><strong>Поверителност:</strong> ${s.privacy}/10</p>
+                    <p><strong>Точност:</strong> ${s.accuracy}/10</p>
+                    <p><strong>Функции:</strong> ${s.features}/10</p>
+                </div>
+            `;
+            container.appendChild(item);
+        });
+    }, 250);
+}
+
+function filterResults(type) {
+    if(type === "all") {
+        renderBrowsers(browsers);
+        return;
+    }
+    const sorted = [...browsers].sort((a,b)=>b[type]-a[type]);
+    renderBrowsers(sorted);
+}
+
+function filterSearchResults(type) {
+    if(type === "all") {
+        renderSearchEngines(searchEngines);
+        return;
+    }
+    const sorted = [...searchEngines].sort((a,b)=>b[type]-a[type]);
+    renderSearchEngines(sorted);
+}
+
+function showBestBrowser() {
+    const bestBrowser = browsers.reduce((best, current) => {
+        const bestScore = best.security + best.speed + best.privacy;
+        const currentScore = current.security + current.speed + current.privacy;
+        return currentScore > bestScore ? current : best;
+    });
+    renderBrowsers([bestBrowser]);
+}
+
+function showBestSearchEngine() {
+    const bestSearchEngine = searchEngines.reduce((best, current) => {
+        const bestScore = best.privacy + best.accuracy + best.features;
+        const currentScore = current.privacy + current.accuracy + current.features;
+        return currentScore > bestScore ? current : best;
+    });
+    renderSearchEngines([bestSearchEngine]);
+}
+
+function toggleTheme() {
+    document.body.classList.toggle("dark");
+    const icon = document.getElementById("themeIcon");
+    if (document.body.classList.contains("dark")) {
+        icon.src = "icon1.png"; // Бяла икона за тъмен режим
+    } else {
+        icon.src = "icon.png"; // Черна икона за светъл режим
+    }
+}
+
+// Инициализиране на правилната икона при зареждане на страницата
+document.addEventListener('DOMContentLoaded', function() {
+    const icon = document.getElementById("themeIcon");
+    if (document.body.classList.contains("dark")) {
+        icon.src = "icon1.png";
+    } else {
+        icon.src = "icon.png";
+    }
+});
+</script>
+
+</body>
+</html>

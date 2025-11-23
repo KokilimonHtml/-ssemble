@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Browser & Search Engine Recommender</title>
+<title>-ssemble: Обобщение, Анализ</title>
 
 <style>
 :root {
@@ -41,18 +41,44 @@ header {
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
 }
 
-/* Описание под хедъра */
-.description {
+/* Информация за сайта и изборни карти */
+.info-card, .choice-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
     text-align: center;
-    padding: 15px;
-    background: var(--bg);
-    border-bottom: 1px solid rgba(120,120,120,0.2);
+    margin: 20px auto;
+    max-width: 600px;
 }
 
-.description p {
-    margin: 0;
-    font-size: 16px;
-    color: var(--text);
+.info-card {
+    font-family: 'Times New Roman', Times, serif;
+    padding: 45px;
+}
+
+.info-card h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.info-card p {
+    font-size: 20px;
+    line-height: 1.6;
+    margin-bottom: 0;
+    font-family: 'Times New Roman', Times, serif, bold;
+}
+
+.choice-card h2 {
+    color: var(--accent);
+    margin-bottom: 20px;
+}
+
+.choice-card p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 25px;
 }
 
 /* Fade анимации */
@@ -141,7 +167,8 @@ button:active {
 
 #results, #searchResults {
     display: none;
-    margin-bottom: 20px;
+    margin-bottom: 30px;
+    margin-top: 30px;
 }
 
 footer {
@@ -158,8 +185,8 @@ footer {
     bottom: 20px;
     right: 20px;
     z-index: 9999;
-    background: var(--card);
-    border: 2px solid var(--accent);
+    background: #000000; /* Черен цвят за светъл режим */
+    border: none;
     border-radius: 50%;
     cursor: pointer;
     width: 50px;
@@ -168,24 +195,42 @@ footer {
     align-items: center;
     justify-content: center;
     box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    transition: background 0.3s, border-color 0.3s;
+    transition: background 0.3s;
+    padding: 0;
+}
+
+body.dark #themeToggle {
+    background: #ffffff; /* Бял цвят за тъмен режим */
 }
 
 #themeToggle:hover {
     transform: scale(1.1);
 }
 
+body:not(.dark) #themeToggle:hover {
+    background: #333333; /* По-светло черно при hover в светъл режим */
+}
+
+body.dark #themeToggle:hover {
+    background: #dddddd; /* По-тъмно бяло при hover в тъмен режим */
+}
+
 #themeToggle img {
     width: 60%;
     height: 60%;
-    filter: none;
+    filter: invert(1); /* Бяла икона за черен бутон */
 }
 
-/* Назад бутон – долен ред, italic + bold, повече разстояние */
+body.dark #themeToggle img {
+    filter: invert(0); /* Черна икона за бял бутон */
+}
+
+/* Назад бутон – долен ред, italic + bold, еднакво разстояние */
 .backBtn {
     font-style: italic;
     font-weight: bold;
     margin-top: 30px;
+    margin-bottom: 30px;
 }
 
 /* Бутони за избор между браузъри и търсачки */
@@ -200,12 +245,7 @@ footer {
 </head>
 <body>
 
-<header>Избор на браузър и търсачка</header>
-
-<!-- Описание под хедъра -->
-<div class="description">
-    <p>Този сайт Ви помага да изберете най-подходящия браузър или търсачка според Вашите нужди.</p>
-</div>
+<header>-ssemble: Твоят доверен съветник!</header>
 
 <!-- Бутон за тъмен/светъл режим -->
 <button id="themeToggle" onclick="toggleTheme()">
@@ -214,16 +254,24 @@ footer {
 
 <div id="content">
 
-    <!-- Начална страница -->
-    <div id="intro" class="card fade show">
-        <h2>Как работи?</h2>
-        <p>
-            Изберете какво искате да изберете и ние ще ви препоръчаме най-подходящия вариант за Вас.
-        </p>
-        <div class="choice-buttons">
-            <button onclick="startBrowsers()">Избор на браузър</button>
-            <button onclick="startSearchEngines()">Избор на търсачка</button>
-        </div>
+    <!-- Информация за сайта -->
+    <div class="info-card fade show">
+        <h2>Добре дошли!</h2>
+        <p>Интелигентната система "-ssemble" служи за препоръки на браузъри и търсачки, която Ви помага да направите информиран избор въз основа на личните Ви предпочитания.</p>
+    </div>
+
+    <!-- Избор на браузър -->
+    <div class="choice-card fade show">
+        <h2>Избор на браузър</h2>
+        <p>Намерете перфектния браузър за Вашите нужди с нашите интелигентни препоръки.</p>
+        <button onclick="startBrowsers()">Избор на браузър</button>
+    </div>
+
+    <!-- Избор на търсачка -->
+    <div class="choice-card fade show">
+        <h2>Избор на търсачка</h2>
+        <p>Открийте идеалната търсачка според Вашите предпочитания за поверителност и функционалност.</p>
+        <button onclick="startSearchEngines()">Избор на търсачка</button>
     </div>
 
     <!-- Филтри за браузъри -->
@@ -259,10 +307,8 @@ footer {
 </div>
 
 <footer>
-    <p>Контакти при проблем с уебсайта:</p>
-    
     <p>Име: Калоян Кирилов</p>
-    <p>Телефон: 0898479345</p>
+    <p>Телефон: 089 8479345</p>
     <p>Email: kirilov.kaloyan.oupe@gmail.com</p>
 </footer>
 
@@ -276,9 +322,10 @@ function fadeOut(id) {
 }
 
 function startBrowsers() {
-    fadeOut("intro");
+    document.querySelector('.info-card').style.display = 'none';
+    document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'none');
+    
     setTimeout(() => {
-        document.getElementById("intro").style.display = "none";
         document.getElementById("filters").style.display = "flex";
         document.getElementById("results").style.display = "block";
         fadeIn("filters");
@@ -288,9 +335,10 @@ function startBrowsers() {
 }
 
 function startSearchEngines() {
-    fadeOut("intro");
+    document.querySelector('.info-card').style.display = 'none';
+    document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'none');
+    
     setTimeout(() => {
-        document.getElementById("intro").style.display = "none";
         document.getElementById("searchFilters").style.display = "flex";
         document.getElementById("searchResults").style.display = "block";
         fadeIn("searchFilters");
@@ -309,8 +357,11 @@ function goBack() {
         document.getElementById("results").style.display = "none";
         document.getElementById("searchFilters").style.display = "none";
         document.getElementById("searchResults").style.display = "none";
-        document.getElementById("intro").style.display = "block";
-        fadeIn("intro");
+        
+        document.querySelector('.info-card').style.display = 'block';
+        document.querySelectorAll('.choice-card').forEach(card => card.style.display = 'block');
+        fadeIn("info-card");
+        document.querySelectorAll('.choice-card').forEach(card => fadeIn(card));
     }, 300);
 }
 
@@ -429,9 +480,22 @@ function showBestSearchEngine() {
 function toggleTheme() {
     document.body.classList.toggle("dark");
     const icon = document.getElementById("themeIcon");
-    // Черна икона за светъл режим, бяла икона за тъмен режим
-    icon.src = document.body.classList.contains("dark") ? "icon1.png" : "icon.png";
+    if (document.body.classList.contains("dark")) {
+        icon.src = "icon.png"; // Бяла икона за тъмен режим
+    } else {
+        icon.src = "icon.png"; // Черна икона за светъл режим
+    }
 }
+
+// Инициализиране на правилната икона при зареждане на страницата
+document.addEventListener('DOMContentLoaded', function() {
+    const icon = document.getElementById("themeIcon");
+    if (document.body.classList.contains("dark")) {
+        icon.src = "icon.png";
+    } else {
+        icon.src = "icon.png";
+    }
+});
 </script>
 
 </body>
