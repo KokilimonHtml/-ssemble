@@ -1,17 +1,17 @@
 const browsers = [
-    {name:"Brave", img:"brave.png", security:8, speed:7, privacy:10, desc:"Фокус върху поверителността"},
-    {name:"Firefox", img:"firefox.png", security:8, speed:7, privacy:9, desc:"Баланс и свобода"},
-    {name:"Chrome", img:"chrome.png", security:7, speed:10, privacy:4, desc:"Най-бързият"},
-    {name:"Safari", img:"safari.png", security:8, speed:8, privacy:7, desc:"Apple оптимизация"},
-    {name:"Edge", img:"edge.png", security:8, speed:9, privacy:6, desc:"Chromium база"}
+    {name:"Brave", img:"brave.png", security:8, speed:7, privacy:10, desc:"Браузър с вградени ad/tracker блокери и силен фокус върху privacy, ориентиран към потребители, които искат повече защита без допълнителни разширения."},
+    {name:"Firefox", img:"firefox.png", security:8, speed:7, privacy:9, desc:"Независим браузър с добър баланс между поверителност, контрол и съвместимост, предпочитан от потребители, които не искат Chromium монопол."},
+    {name:"Chrome", img:"chrome.png", security:7, speed:10, privacy:4, desc:"Най-масовият браузър с отлична съвместимост, висока бързина и дълбока интеграция с Google услуги, за сметка на поверителността."},
+    {name:"Safari", img:"safari.png", security:8, speed:8, privacy:7, desc:"Бърз и енергийно ефективен браузър, оптимизиран за Apple устройства, с добър privacy контрол, но ограничена персонализация и екосистемна затвореност."},
+    {name:"Edge", img:"edge.png", security:8, speed:9, privacy:6, desc:"Браузър на Microsoft с добър UX, силна интеграция с Windows и AI функции, предлагащ повече функционалност от Chrome с подобна основа."}
 ];
 
 const searchEngines = [
-    {name:"Google", img:"google.png", privacy:4, accuracy:10, features:10, desc:"Най-точни резултати"},
-    {name:"DuckDuckGo", img:"duckduckgo.png", privacy:10, accuracy:8, features:7, desc:"Без проследяване"},
-    {name:"Bing", img:"bing.png", privacy:5, accuracy:9, features:8, desc:"Microsoft екосистема"},
-    {name:"Startpage", img:"startpage.png", privacy:9, accuracy:9, features:6, desc:"Google без следене"},
-    {name:"Ecosia", img:"ecosia.png", privacy:7, accuracy:8, features:6, desc:"Екологична"}
+    {name:"Google", img:"google.png", privacy:4, accuracy:10, features:10, desc:"Предоставя най-добрите опции, според търсенето и изкарва всичко по същество, чрез нововграденият AI-Gemini."},
+    {name:"DuckDuckGo", img:"duckduckgo.png", privacy:10, accuracy:8, features:7, desc:"Изолира всички тракери, блокира бисквитки и скрива pop-up елементите. Цели се поверителност."},
+    {name:"Bing", img:"bing.png", privacy:5, accuracy:9, features:8, desc:"Bing е търсачка на Microsoft с добър визуален UX, стабилни резултати, вградени AI функции и умерена персонализация. Насочена е към потребители без фокус върху крайна поверителност."},
+    {name:"Startpage", img:"startpage.png", privacy:9, accuracy:9, features:6, desc:"Най-добрата алтернатива на Google-също като него предоставя най-точните резултати, на добра поверителност."},
+    {name:"Ecosia", img:"ecosia.png", privacy:7, accuracy:8, features:6, desc:"Търсачка, създадена с цел екология. От приходите от рекламите се засаждат дървета по света. Сървърите им работят с възобновяема енергия (на теория дори “carbon negative”)."}
 ];
 
 function startBrowsers() {

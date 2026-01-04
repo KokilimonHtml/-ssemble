@@ -2,7 +2,7 @@
 <html lang="bg">
 <head>
     <meta charset="UTF-8">
-    <title>Избор на браузър и търсачка</title>
+    <title>-ssemble: Съветник</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -10,7 +10,7 @@
 
 <header>
     <div class="header-content">
-        Избор на браузър и търсачка
+        -ssemble: Твоят доверен съветник!
         <button id="themeToggle">
             <img id="themeIcon" src="luna.png" alt="theme">
         </button>
@@ -24,7 +24,10 @@
         <h2>Какво представлява този сайт?</h2>
         <p>
             Това е интерактивен съветник, който ти помага да избереш
-            най-подходящия браузър или търсачка според реални критерии.
+            най-подходящият инструмент за теб според реални критерии.
+            Включени са всички най-популярни опции, като при всеки вид
+            инструмент е сложен най-добрият вариант, на база най-добро
+            оценяване (имащ най-добър rating).
         </p>
     </div>
 
@@ -56,7 +59,7 @@
         <div class="btnRow">
             <button onclick="filterBrowsers('security')">Сигурност</button>
             <button onclick="filterBrowsers('speed')">Бързина</button>
-            <button onclick="filterBrowsers('privacy')">Поверителност</button>
+            <button onclick="filterBrowsers('personalization')">Персонализация</button>
             <button onclick="filterBrowsers('all')">Всички</button>
         </div>
     </div>
@@ -70,9 +73,9 @@
             <h2>Търсачка</h2>
         </div>
         <div class="btnRow">
-            <button onclick="filterSearch('privacy')">Поверителност</button>
-            <button onclick="filterSearch('accuracy')">Точност</button>
             <button onclick="filterSearch('features')">Функции</button>
+            <button onclick="filterSearch('accuracy')">Точност</button>
+            <button onclick="filterSearch('personalization')">Персонализация</button>
             <button onclick="filterSearch('all')">Всички</button>
         </div>
     </div>
