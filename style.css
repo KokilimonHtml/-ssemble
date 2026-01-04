@@ -1,17 +1,25 @@
 :root {
-    --bg: #f5f5f5;
-    --text: #222;
-    --card: #ffffff;
-    --accent: #7b3fe4;
-    --accent-dark: #5727a8;
+    --bg: #A2C3A4;
+    --header: #C4F1BE;
+    --header-text: #111;
+    --card: #869D96;
+    --btn: #525B76;
+    --text: #111;
+    --spacing: 25px;
+    --content-max-width: 900px;
+    --content-padding: 20px;
 }
 
 body.dark {
-    --bg: #0e0e12;
-    --text: #e5e5e5;
-    --card: #1a1a1f;
-    --accent: #a676ff;
-    --accent-dark: #7f44db;
+    --bg: #121212;
+    --header: #1F1F1F;
+    --card: #1f1f1f;
+    --text: #eee;
+    --header-text: #eee;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
@@ -19,105 +27,101 @@ body {
     font-family: Arial, sans-serif;
     background: var(--bg);
     color: var(--text);
-    transition: background 0.3s, color 0.3s;
+    transition: 0.4s;
 }
 
 header {
-    background: var(--accent);
-    color: white;
-    padding: 18px;
-    text-align: center;
+    background: var(--header);
+    color: var(--header-text);
+    padding: 0;
     font-size: 22px;
     font-weight: bold;
-    letter-spacing: 1px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+    margin-bottom: var(--spacing);
 }
 
-/* Информация за сайта и изборни карти */
-.info-card, .choice-card {
-    background: var(--card);
-    border-radius: 12px;
-    padding: 30px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
-    text-align: center;
-    margin: 20px auto;
-    max-width: 600px;
+.header-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 80px;
+    position: relative;
+    width: 100%;
 }
 
-.info-card {
-    font-family: 'Times New Roman', Times, serif;
-    padding: 45px;
+#themeToggle {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 0;
 }
 
-.info-card h2 {
-    color: var(--accent);
-    margin-bottom: 20px;
-    font-family: 'Times New Roman', Times, serif;
+#themeToggle img {
+    width: 40px;
+    height: 40px;
 }
 
-.info-card p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 0;
-    font-family: 'Times New Roman', Times, serif;
+#content {
+    max-width: var(--content-max-width);
+    margin: 0 auto var(--spacing) auto;
+    padding: 0 var(--content-padding);
 }
 
-.choice-card h2 {
-    color: var(--accent);
-    margin-bottom: 20px;
-}
-
-.choice-card p {
-    font-size: 18px;
-    line-height: 1.6;
-    margin-bottom: 25px;
-}
-
-/* Fade анимации */
-.fade {
-    opacity: 0;
-    transform: translateY(10px);
-    transition: opacity 0.4s ease, transform 0.4s ease;
-}
-.fade.show {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-/* Модерни карти */
 .card {
     background: var(--card);
+    padding: 30px;
     border-radius: 12px;
-    padding: 25px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.12);
-    transition: background 0.3s, transform 0.2s;
+    margin-bottom: var(--spacing);
+    animation: fadeUp 0.6s ease;
+    width: 100%;
 }
 
-/* Картите с bounce + ease-out анимация */
+.card h2 {
+    margin-top: 0;
+}
+
+button {
+    background: var(--btn);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    width: 260px;
+    height: 55px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    transform: scale(1.05);
+}
+
+.mainBtn {
+    margin-top: 15px;
+}
+
+.btnRow {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: var(--spacing);
+}
+
+.backBtn {
+    display: block;
+    margin: var(--spacing) auto var(--spacing) auto;
+    width: 260px;
+}
+
 .item {
     display: flex;
     gap: 20px;
-    align-items: center;
-    border-bottom: 1px solid rgba(120,120,120,0.2);
-    padding: 15px 0;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: bounceFade 0.6s forwards cubic-bezier(0.25, 1, 0.5, 1);
-}
-
-@keyframes bounceFade {
-    0% {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-    50% {
-        opacity: 1;
-        transform: translateY(-5px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
+    margin-bottom: 20px;
+    animation: slideIn 0.5s ease;
 }
 
 .item img {
@@ -125,205 +129,52 @@ header {
     height: 60px;
 }
 
-/* Основни бутони */
-button {
-    padding: 12px 25px;
-    background: var(--accent);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-size: 15px;
-    transition: background 0.3s, transform 0.2s;
-}
-button:hover {
-    background: var(--accent-dark);
-}
-button:active {
-    transform: scale(0.95);
-}
-
-/* Контейнери */
-#content {
-    max-width: 900px;
-    margin: 30px auto;
-    padding: 15px;
-}
-
-#filters, #searchFilters {
+#filters, #searchFilters,
+#results, #searchResults,
+#browserBackBtn, #searchBackBtn {
     display: none;
-    flex-direction: column;
-    align-items: center;
-    gap: 15px;
 }
 
-.filter-buttons {
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap;
-    justify-content: center;
+.filter-title-card {
+    background: var(--card);
+    padding: 20px 30px;
+    border-radius: 12px;
+    margin-bottom: var(--spacing);
+    text-align: center;
+    animation: fadeUp 0.6s ease;
+    width: 100%;
 }
 
-#results, #searchResults {
-    display: none;
-    margin-bottom: 30px;
-    margin-top: 30px;
+.filter-title-card h2 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: bold;
 }
 
 footer {
+    background: transparent;
+    color: var(--text);
     text-align: center;
-    margin-top: 50px;
+    padding: var(--content-padding);
+    margin-top: var(--spacing);
+}
+
+.footer-card {
     background: var(--card);
-    padding: 20px;
-    border-top: 2px solid var(--accent);
-}
-
-/* Стилове за филтър бутоните */
-.filter-buttons button {
-    min-width: 140px;
-    padding: 12px 20px;
-    margin: 5px;
-    flex: 1 0 auto;
-    text-align: center;
-}
-
-/* Отделен клас за по-големи бутони */
-.large-filter {
-    min-width: 180px;
-    padding: 14px 25px;
-    font-size: 16px;
-    font-weight: bold;
-}
-
-/* Бутон за тъмен/светъл режим – долен десен ъгъл */
-#themeToggle {
-    position: fixed;
-    bottom: 20px;
-    right: 20px;
-    z-index: 9999;
-    background: #000000; /* Черен цвят за светъл режим */
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-    width: 50px;
-    height: 50px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-    transition: background 0.3s;
-    padding: 0;
-}
-
-body.dark #themeToggle {
-    background: #ffffff; /* Бял цвят за тъмен режим */
-}
-
-#themeToggle:hover {
-    transform: scale(1.1);
-}
-
-body:not(.dark) #themeToggle:hover {
-    background: #333333; /* По-светло черно при hover в светъл режим */
-}
-
-body.dark #themeToggle:hover {
-    background: #dddddd; /* По-тъмно бяло при hover в тъмен режим */
-}
-
-#themeToggle img {
-    width: 60%;
-    height: 60%;
-    filter: invert(1); /* Бяла икона за черен бутон */
-}
-
-body.dark #themeToggle img {
-    filter: invert(0); /* Черна икона за бял бутон */
-}
-
-/* Назад бутон – долен ред, italic + bold, еднакво разстояние */
-.backBtn {
-    font-style: italic;
-    font-weight: bold;
-    margin-top: 30px;
-    margin-bottom: 30px;
-}
-
-/* Бутони за избор между браузъри и търсачки */
-.choice-buttons {
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    margin-top: 20px;
-    flex-wrap: wrap;
-}
-
-/* Модални прозорци */
-.modal {
-    display: none;
-    position: fixed;
-    z-index: 10000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0,0,0,0.5);
-}
-
-.modal-content {
-    background-color: var(--card);
-    margin: 15% auto;
     padding: 30px;
     border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    box-shadow: 0 5px 20px rgba(0,0,0,0.3);
-}
-
-.modal-content h2 {
-    color: var(--accent);
-    margin-bottom: 20px;
-    text-align: center;
-}
-
-.modal-content input {
+    margin: 0 auto;
+    animation: fadeUp 0.6s ease;
     width: 100%;
-    padding: 12px;
-    margin: 10px 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-    font-size: 16px;
-    background: var(--bg);
-    color: var(--text);
+    max-width: var(--content-max-width);
 }
 
-.modal-content button {
-    width: 100%;
-    margin-top: 15px;
+@keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-}
-
-.close:hover {
-    color: var(--accent);
-}
-
-/* Аутентикационни бутони */
-#authButtons button, #userInfo button {
-    padding: 8px 15px;
-    margin-left: 5px;
-    font-size: 14px;
-}
-
-#userInfo {
-    background: var(--card);
-    padding: 8px 15px;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(-20px); }
+    to { opacity: 1; transform: translateX(0); }
 }
