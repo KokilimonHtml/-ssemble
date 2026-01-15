@@ -1,139 +1,195 @@
+/* ============================= */
+/* ГЛОБАЛНИ CSS ПРОМЕНЛИВИ        */
+/* ============================= */
+
 :root {
-    --bg: #A2C3A4;
-    --header: #C4F1BE;
-    --header-text: #111;
-    --card: #869D96;
-    --btn: #525B76;
-    --text: #111;
-    --spacing: 25px;
-    --content-max-width: 900px;
-    --content-padding: 20px;
+    --bg: #A2C3A4;                     /* Основен фон на сайта (light mode) */
+    --header: #C4F1BE;                 /* Фон на хедъра */
+    --header-text: #111;               /* Цвят на текста в хедъра */
+    --card: #869D96;                   /* Фон на всички карти */
+    --btn: #525B76;                    /* Основен цвят на бутоните */
+    --text: #111;                      /* Основен цвят на текста */
+    --spacing: 25px;                   /* Унифицирано разстояние между елементите */
+    --content-max-width: 900px;        /* Максимална ширина на съдържанието */
+    --content-padding: 20px;           /* Вътрешен padding на основното съдържание */
 }
+
+/* ============================= */
+/* DARK MODE – ПРЕЗАПИС НА ЦВЕТОВЕ */
+/* ============================= */
 
 body.dark {
-    --bg: #121212;
-    --header: #1F1F1F;
-    --card: #1f1f1f;
-    --text: #eee;
-    --header-text: #eee;
+    --bg: #121212;                     /* Тъмен фон на страницата */
+    --header: #1F1F1F;                 /* Тъмен хедър */
+    --card: #1f1f1f;                   /* Тъмни карти */
+    --text: #eee;                      /* Светъл текст за контраст */
+    --header-text: #eee;               /* Светъл текст в хедъра */
 }
+
+/* ============================= */
+/* ГЛОБАЛНИ НАСТРОЙКИ            */
+/* ============================= */
 
 * {
-    box-sizing: border-box;
+    box-sizing: border-box;            /* Padding и border не увеличават реалния размер */
 }
+
+/* ============================= */
+/* ОСНОВНО ТЯЛО НА СТРАНИЦАТА     */
+/* ============================= */
 
 body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    transition: 0.4s;
+    margin: 0;                         /* Премахва default margin */
+    font-family: Arial, sans-serif;    /* Основен шрифт */
+    background: var(--bg);             /* Фон от CSS променлива */
+    color: var(--text);                /* Цвят на текста */
+    transition: 0.4s;                  /* Плавен преход при смяна на тема */
 }
 
+/* ============================= */
+/* HEADER                        */
+/* ============================= */
+
 header {
-    background: var(--header);
-    color: var(--header-text);
-    padding: 0;
-    font-size: 22px;
-    font-weight: bold;
-    margin-bottom: var(--spacing);
+    background: var(--header);         /* Фон на хедъра */
+    color: var(--header-text);         /* Цвят на текста */
+    padding: 0;                        /* Без вътрешен padding */
+    font-size: 22px;                   /* Размер на текста */
+    font-weight: bold;                 /* Удебелен текст */
+    margin-bottom: var(--spacing);     /* Разстояние под хедъра */
 }
 
 .header-content {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    height: 80px;
-    position: relative;
+    display: flex;                     /* Flex layout */
+    align-items: center;               /* Центрира вертикално */
+    justify-content: center;           /* Центрира хоризонтално */
+    height: 80px;                      /* Фиксирана височина */
+    position: relative;                /* Нужно за позициониране на бутона */
     width: 100%;
 }
 
+/* ============================= */
+/* БУТОН ЗА СМЯНА НА ТЕМА        */
+/* ============================= */
+
 #themeToggle {
-    position: absolute;
-    top: 50%;
-    right: 20px;
-    transform: translateY(-50%);
-    background: transparent;
-    border: none;
-    cursor: pointer;
+    position: absolute;                /* Абсолютно позициониране */
+    top: 50%;                          /* Поставя бутона по средата */
+    right: 20px;                       /* Отстъп отдясно */
+    transform: translateY(-50%);       /* Реално вертикално центриране */
+    background: transparent;           /* Без фон */
+    border: none;                      /* Без рамка */
+    cursor: pointer;                   /* Курсор „ръчичка“ */
     padding: 0;
 }
 
 #themeToggle img {
-    width: 40px;
-    height: 40px;
+    width: 40px;                       /* Ширина на иконата */
+    height: 40px;                      /* Височина на иконата */
 }
+
+/* ============================= */
+/* ОСНОВНО СЪДЪРЖАНИЕ            */
+/* ============================= */
 
 #content {
-    max-width: var(--content-max-width);
-    margin: 0 auto var(--spacing) auto;
-    padding: 0 var(--content-padding);
+    max-width: var(--content-max-width); /* Ограничение на ширината */
+    margin: 0 auto var(--spacing) auto;  /* Центриране + долен отстъп */
+    padding: 0 var(--content-padding);   /* Вътрешен padding */
 }
 
+/* ============================= */
+/* КАРТИ (CARD)                 */
+/* ============================= */
+
 .card {
-    background: var(--card);
-    padding: 30px;
-    border-radius: 12px;
-    margin-bottom: var(--spacing);
-    animation: fadeUp 0.6s ease;
+    background: var(--card);           /* Фон на картата */
+    padding: 30px;                     /* Вътрешно разстояние */
+    border-radius: 12px;               /* Заоблени ъгли */
+    margin-bottom: var(--spacing);     /* Разстояние между карти */
+    animation: fadeUp 0.6s ease;       /* Анимация при появяване */
     width: 100%;
 }
 
 .card h2 {
-    margin-top: 0;
+    margin-top: 0;                     /* Премахва горния margin */
 }
 
+/* ============================= */
+/* БУТОНИ                        */
+/* ============================= */
+
 button {
-    background: var(--btn);
-    color: white;
-    border: none;
-    border-radius: 8px;
-    width: 260px;
-    height: 55px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: 0.3s;
+    background: var(--btn);            /* Цвят на бутона */
+    color: white;                      /* Цвят на текста */
+    border: none;                      /* Без рамка */
+    border-radius: 8px;                /* Заоблени ъгли */
+    width: 260px;                      /* Фиксирана ширина */
+    height: 55px;                      /* Фиксирана височина */
+    font-size: 16px;                   /* Размер на текста */
+    cursor: pointer;                   /* Курсор „ръчичка“ */
+    transition: 0.3s;                  /* Плавен hover ефект */
 }
 
 button:hover {
-    transform: scale(1.05);
+    transform: scale(1.05);            /* Леко увеличаване при hover */
 }
 
 .mainBtn {
-    margin-top: 15px;
+    margin-top: 15px;                  /* Разстояние над основните бутони */
 }
 
+/* ============================= */
+/* РЕД С БУТОНИ (ФИЛТРИ)         */
+/* ============================= */
+
 .btnRow {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 15px;
-    justify-content: center;
+    display: flex;                     /* Flex layout */
+    flex-wrap: wrap;                   /* Разрешава пренасяне на ред */
+    gap: 15px;                         /* Разстояние между бутоните */
+    justify-content: center;           /* Центриране */
     margin-bottom: var(--spacing);
 }
 
+/* ============================= */
+/* БУТОН НАЗАД                   */
+/* ============================= */
+
 .backBtn {
-    display: block;
-    margin: var(--spacing) auto var(--spacing) auto;
+    display: block;                    /* Блоков елемент */
+    margin: var(--spacing) auto var(--spacing) auto; /* Центриране */
     width: 260px;
 }
 
+/* ============================= */
+/* ЕЛЕМЕНТИ (БРАУЗЪРИ / ТЪРСАЧКИ) */
+/* ============================= */
+
 .item {
-    display: flex;
-    gap: 20px;
+    display: flex;                     /* Подреждане в ред */
+    gap: 20px;                         /* Разстояние между лого и текст */
     margin-bottom: 20px;
-    animation: slideIn 0.5s ease;
+    animation: slideIn 0.5s ease;      /* Анимация при появяване */
 }
 
 .item img {
-    width: 60px;
-    height: 60px;
+    width: 60px;                       /* Ширина на логото */
+    height: 60px;                      /* Височина на логото */
 }
+
+/* ============================= */
+/* СКРИТИ СЕКЦИИ ПО ПОДРАЗБИРАНЕ */
+/* ============================= */
 
 #filters, #searchFilters,
 #results, #searchResults,
 #browserBackBtn, #searchBackBtn {
-    display: none;
+    display: none;                     /* Скриват се до активиране с JS */
 }
+
+/* ============================= */
+/* ЗАГЛАВИЕ НА ФИЛТРИТЕ          */
+/* ============================= */
 
 .filter-title-card {
     background: var(--card);
@@ -151,10 +207,14 @@ button:hover {
     font-weight: bold;
 }
 
+/* ============================= */
+/* FOOTER                        */
+/* ============================= */
+
 footer {
-    background: transparent;
-    color: var(--text);
-    text-align: center;
+    background: transparent;           /* Без отделен фон */
+    color: var(--text);                /* Цвят на текста */
+    text-align: center;                /* Центриране */
     padding: var(--content-padding);
     margin-top: var(--spacing);
 }
@@ -169,12 +229,28 @@ footer {
     max-width: var(--content-max-width);
 }
 
+/* ============================= */
+/* АНИМАЦИИ                      */
+/* ============================= */
+
 @keyframes fadeUp {
-    from { opacity: 0; transform: translateY(20px); }
-    to { opacity: 1; transform: translateY(0); }
+    from { 
+        opacity: 0;                    /* Започва прозрачно */
+        transform: translateY(20px);   /* Отдолу нагоре */
+    }
+    to { 
+        opacity: 1;                    /* Става видимо */
+        transform: translateY(0); 
+    }
 }
 
 @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-20px); }
-    to { opacity: 1; transform: translateX(0); }
+    from { 
+        opacity: 0;                    /* Започва прозрачно */
+        transform: translateX(-20px);  /* Отляво надясно */
+    }
+    to { 
+        opacity: 1; 
+        transform: translateX(0); 
+    }
 }
